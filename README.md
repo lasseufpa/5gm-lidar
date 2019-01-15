@@ -20,21 +20,21 @@ There are some big tasks we perform with these 5gm-data softwares:
 We detail each one below.
 
 
-1) How to design a new simulation with SUMO and InSite
-============
+1)How to design a new simulation with SUMO and InSite
+=============
 
 TBD
 
 InSite results (https://owncloud.lasseufpa.org/s/SgxUXTi9niGw915) - 1.1 GB  
 
-2) How to run the BlenSor simulation after having InSite results
+2)How to run the BlenSor simulation after having InSite results
 ============
 
 TBD
 
 Blensor results (https://owncloud.lasseufpa.org/s/9TzYsxYrIrgPrP4) - 57.9 GB
 
-3) How to convert InSite into MIMO channels
+3)How to convert InSite into MIMO channels
 ============
 Here we assume that both InSite and Blensor were already executed and show steps to organize the data.
 Assume the InSite data is at folder 
@@ -175,7 +175,7 @@ wc *.csv
 Now you have the channels and the 4 lists. You can continue use Python to do
 beam-selection or work with LIDAR PCDs with Matlab. We assume the latter case in the next section.
 
-4) How to convert Blensor output into obstacle matrices
+4)How to convert Blensor output into obstacle matrices
 ===========
 
 This process is Similar to channel generation using the insite files, but instead it will generate the so-called obstacle matrices, using the LIDAR output from blensor.
@@ -228,7 +228,7 @@ Now the obstacles matrices can be created using the md\_readPCD.py script
 After running the script above, you should have a folder such as 'obstacles\_new\_3d' with the obstacle matrices inside npz files organized per episode.
 
 
-5) Using Python to process MIMO channels and generate beam-selection outputs
+5)Using Python to process MIMO channels and generate beam-selection outputs
 ============
 
 1.	Codebook design
@@ -330,7 +330,7 @@ python createBeamsOutputsAsNpz.py
 This saves file beams_output.npz that is the output of the neural nets.
 
 
-6) Beam-selection using LIDAR data
+6)Beam-selection using LIDAR data
 ============
 1. Generating ML inputs:
 
@@ -343,7 +343,7 @@ using the createInputFromLIDAR.py
 
 This saves file beams_input.npz that is the input of the neural nets.
 
-2.	Running the Classifier:
+2. Running the Classifier:
 
 Make sure you have the output npz file and the input file matching (obtained from the same list of examples). Then run:
 
@@ -353,10 +353,10 @@ python classifierTopKBeams.py
 ```
 
 
-7) Beam-selection using the positions of the vehicles
+7)Beam-selection using the positions of the vehicles
 ============
 TBD
 
-8) Use LIDAR data for LOS detection with neural networks or a geometric approach
+8)Use LIDAR data for LOS detection with neural networks or a geometric approach
 ============
 TBD
