@@ -1,4 +1,4 @@
-There are some big tasks we perform with these 5gm-data softwares:
+Tasks that can be performed with the LIDAR and 5gm-data softwares:
 =============
 
 1) How to design a new simulation with SUMO and InSite
@@ -30,8 +30,7 @@ InSite results (https://owncloud.lasseufpa.org/s/SgxUXTi9niGw915) - 1.1 GB
 2)How to run the BlenSor simulation after having InSite results
 ============
 
-TBD
-
+Download LIDAR data, from 
 Blensor results (https://owncloud.lasseufpa.org/s/9TzYsxYrIrgPrP4) - 57.9 GB
 
 3)How to convert InSite into MIMO channels
@@ -120,7 +119,7 @@ numNLOS =  4712
 Sum =  11194
 ```
 
-3.2) Create the infamous 4 lists
+3.2) Create 4 lists
 ===========
 
 We will use only four lists as text (in fact CSV) files. We show how to generate them.
@@ -354,9 +353,5 @@ python classifierTopKBeams.py
 
 
 7)Beam-selection using the positions of the vehicles
-============
-TBD
-
-8)Use LIDAR data for LOS detection with neural networks or a geometric approach
 ============
 TBD
