@@ -99,6 +99,7 @@ less new files than older, you may mix files from 2 distinct simulations in
 the same folder):
 
 del .\insitedata\*
+mkdir .\insitedata
 
 python convert5gmv1ToChannels.py
 
@@ -216,13 +217,14 @@ to create a symbolic link of these files inside the inSite folder using lnScans.
 5gm-lidar>python lnScans.py insitefolder allscansfolder
 ```
 
-Now the obstacles matrices can be created using the md\_readPCD.py script
+Now the obstacles matrices can be created using the md\_readPCD.py script. Note that this scripts utilizes python2 instead of python3
 
 ```
-5gm-lidar>python readPCD.py epi_begin epi_end 3D/2D 1/0
 #You must choose the start and end episodes 
 #3D will create 3D matrices (x,y,z) and 2D will created 2D matrices (x,y)
 #0 - to utilize the noiseless LIDAR PCD data and 1 to use the noise data.
+
+5gm-lidar>python readPCD.py epi_begin epi_end 3D/2D 1/0
 ```
 After running the script above, you should have a folder such as 'obstacles\_new\_3d' with the obstacle matrices inside npz files organized per episode.
 

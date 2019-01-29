@@ -86,7 +86,7 @@ def main():
                 print('Jumping Episodes',row['EpisodeID'],starting_episode)
                 continue
             print('Reading data for Episode ' + str(row['EpisodeID']) + '...')
-            npz_name = outputFolder + 'obstacles_e_' + str(row['EpisodeID']) + '.npz'
+            npz_name = os.path.join(outputFolder , 'obstacles_e_' + str(row['EpisodeID']) + '.npz')
             if os.path.exists(npz_name):
                 print('Episode is already saved. Jumping to next...')
                 continue
@@ -129,7 +129,7 @@ def main():
                 tmpvar = 1
                 for vehicle in selectedVehicles.items():
                     vehicle_position = [[vehicle[1][0],vehicle[1][1],vehicle[1][2]]] 
-                    pcd_path = tmpdir + vehicle[0]  + scan_type + '00000.pcd' # if noisy add before zeros 'noisy' 
+                    pcd_path = os.path.join(tmpdir, vehicle[0]  + scan_type + '00000.pcd') # if noisy add before zeros 'noisy' 
                     if not os.path.exists(pcd_path):
                         print('This vehicle: '+ vehicle[0] +' is not present in this scenario.')
                         print(pcd_path)
@@ -189,7 +189,7 @@ def main():
 
 
 
-    npz_name = outputFolder + 'obstacles_e_' + str(episodeID) + '.npz'
+    npz_name = os.path.join(outputFolder , 'obstacles_e_' + str(episodeID) + '.npz')
     np.savez_compressed(npz_name, obstacles_matrix_array=obstacles_matrix_array)
     print('Saved file ', npz_name)
     time_elapsed = datetime.now() - startTime

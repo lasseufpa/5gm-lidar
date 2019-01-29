@@ -9,13 +9,23 @@ def getInfo(filename,inputPath):
         allLines = list(reader)
         numExamples = len(allLines) - 1 # header
 
-    currentEpisodesInputs = np.load(os.path.join(inputPath,'obstacles_e_10.npz'))
-    obstacles_matrix_array = currentEpisodesInputs['obstacles_matrix_array']
-    return numExamples,obstacles_matrix_array.shape
+    run = 0
+    while(1):
+        npz_name = os.path.join(inputPath,'obstacles_e_'+str(run)+'.npz')
+        if os.path.exists(npz_name):
+            currentEpisodesInputs = np.load(npz_name)
+            obstacles_matrix_array = currentEpisodesInputs['obstacles_matrix_array']
+            return numExamples,obstacles_matrix_array.shape
+        elif run > 200:
+            print('You may indicated a wrong folder. Check your input path')
+            break
+        else:
+            run += 1
 
 
 filename = 'matrixChannels.csv'
 argv = sys.argv
+print('Usage: python createInputFromLIDAR.py inputPath npz_name')
 inputPath = argv[1]
 npz_name = argv[2]
 
