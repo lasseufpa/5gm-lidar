@@ -40,21 +40,21 @@ Assume the InSite data is at folder
 D:\insitedata\noOverlappingTx4m_s1130 (where 1130 is the SUMO random seed). Another alternative is to name as
 d:\insitedata\simul45_20180915  (format is year, month, day).
 We have the following subtasks:
-1. Channel generation: Convert InSite channel data in a database (episode.db) and also into files that can be easily read by Python (npz) and Matlab (hdf5)
-2. Lists: Create two lists of text files. The first indicates all valid and invalid receivers, while the second deals only with the valid receivers and also informs the LOS and NLOS ones
+1. Channel generation: Convert InSite channel data in a database (episodedata.db) and also into files that can be easily read by Python (npz) and Matlab (hdf5)
+2. Lists: Create two lists of text files. The first indicates all valid and invalid receivers, while the second deals only with the valid receivers and also informs the LOS and NLOS ones.
 
 3.1) - Channel generation
 ===========
 
-1. First we need the episode.db corresponding to the RT simulations
+1. First we need the episodedata.db corresponding to the RT simulations
 
-cd D:\github\5gm-rwi-simulation
+`cd D:\github\5gm-rwi-simulation`
 
-Consider deleting any file named episode.db in the current folder. 
+Consider deleting any file named episodedata.db in the current folder. 
 
-In other words, check if you have a file name episode.db in this (current) folder. If you have, consider that the script todb.py appends the new data into an existing episode.db  file. So, you may want to move it to another folder or delete it in case you want to generate a new file, from scratch.
+In other words, check if you have a file name episodedata.db in this (current) folder. If you have, consider that the script todb.py appends the new data into an existing episodedata.db  file. So, you may want to move it to another folder or delete it in case you want to generate a new file, from scratch.
 
-python todb.py D:\insitedata\noOverlappingTx4m_s1130
+`python todb.py D:\insitedata\noOverlappingTx4m_s1130`
 
 In the end you know how many episodes were processed and should take note of that because it will be requested, e.g.
 ```
@@ -65,15 +65,15 @@ Processed  2086  scenes (RT simulations)
 ```
 In the case above there was N=1 scene per episode, but in general there are more than 1 scene per episode (N>1).
 
-A file episode.db was created in current folder. Rename and move it to its final folder.
+A file episodedata.db was created in current folder. Rename and move it to its final folder.
 
 2. Write the ray information as both npz and hdf5 files. Write to folder ./insitedata. Note that all data is written and if the Tx / Rx pair is not valid, NaN are used.
 
 First you need to edit and change variables such as numScenesPerEpisode.
 
-cd D:\github\5gm-data
+`cd D:\github\5gm-data`
 
-Copy the episode.db to the current folder. You may have different .db files:
+Copy the episodedata.db to the current folder. You may have different .db files:
 ```
 D:\github\5gm-data>dir *.db
  O volume na unidade D é Data
@@ -92,16 +92,16 @@ D:\github\5gm-data>dir *.db
 15/09/2018  17:56       225.796.096 episodedata_simul45_flat_new_marcus.db
 ```
 
-Make sure you are using the right episode.db and edit convert5gmv1ToChannels.py
-to indicate e.g. the output folder. If it is .\insitedata you may want to delete
+Make sure you are using the right episodedata.db and edit convert5gmv1ToChannels.py
+to indicate e.g. the output folder. If it is `.\insitedata` you may want to delete
 all files before creating new (old files would be overwritten but if there are
 less new files than older, you may mix files from 2 distinct simulations in
 the same folder):
 
-del .\insitedata\*
-mkdir .\insitedata
+`del .\insitedata\*`
+`mkdir .\insitedata`
 
-python convert5gmv1ToChannels.py
+`python convert5gmv1ToChannels.py`
 
 Recall that episode.db knows how many rays were obtained (sometimes a number smaller than the maximum of e.g. 25 rays), and
 the arrays saved by the script will use NaN when the number of rays is smaller than the maximum. 
@@ -127,9 +127,9 @@ We will use only four lists as text (in fact CSV) files. We show how to generate
 
 3. Write the 1st list by redirecting the stdout with > 
 
-cd D:\github\5gm-data
+`cd D:\github\5gm-data`
 
-python generateInfoList.py > list1_valids_and_invalids.csv
+`python generateInfoList.py > list1_valids_and_invalids.csv`
 
 Note that the output will depend on the episode.db that is in the current folder.
 You then need to edit this csv file to eliminate its first and last rows (that should be similar to the ones below):
@@ -151,7 +151,7 @@ Sum =  11194
 
 5.	Then we need a second list, which includes information only for the valid receivers
 
-python generateInSitePlusSumoList.py D:\insitedata\noOverlappingTx4m_s1130 > list2_only_valids.csv
+`python generateInSitePlusSumoList.py D:\insitedata\noOverlappingTx4m_s1130 > list2_only_valids.csv`
 
 where the first argument (argv[1]) is the InSite output folder.
 Then we can specialize the list of valid receivers to other lists with only LOS and NLOS:
@@ -160,7 +160,7 @@ grep LOS=0 list2_only_valids.csv > list2_only_validsNLOS.csv
 grep LOS=1 list2_only_valids.csv > list2_only_validsLOS.csv
 ```
 
-If you have wc (you are using e.g. Linux), you can check if the results below
+If you have `wc` (you are using e.g. Linux), you can check if the results below
 match numLOS and numNLOS indicated in list1_valids_and_invalids.csv (see above):
 
 ```
@@ -178,13 +178,13 @@ beam-selection or work with LIDAR PCDs with Matlab. We assume the latter case in
 4)How to convert Blensor output into obstacle matrices
 ===========
 
-This process is Similar to channel generation using the insite files, but instead it will generate the so-called obstacle matrices, using the LIDAR output from blensor.
+This process is Similar to channel generation using the insite files, but instead it will generate the so-called obstacle matrices, using the LIDAR output from Blensor.
 
 1. First we need the episode.db corresponding to the RT simulations
 
-Make sure you are using the right episode.db and run generateMatrixChannels.py
+Make sure you are using the right episodedata.db and run generateMatrixChannels.py
 ```
-python genereateMatrixChannels.py > matrixChannels.csv
+python generateMatrixChannels.py > matrixChannels.csv
 
 ```
 Note that the output will depend on the episode.db that is in the current folder.
@@ -211,13 +211,12 @@ Val,EpisodeID,SceneID,VehicleArrayID,VehicleName,x,y,LOS
 ```
 Note that if you download the Blensor files they should be inside a folder in their zips, you must run lnScans.py
 to create a symbolic link of these files inside the inSite folder using lnScans.py script
-
  
 ```
-5gm-lidar>python lnScans.py insitefolder allscansfolder
+5gm-lidar>python lnScans.py insitefolder AllBlensorScansFolder
 ```
 
-Now the obstacles matrices can be created using the md\_readPCD.py script. Note that this scripts utilizes python2 instead of python3
+Now the obstacles matrices can be created using the `readPCD.py` script. Note that this scripts utilizes python2 instead of python3
 
 ```
 #You must choose the start and end episodes 
@@ -232,14 +231,14 @@ After running the script above, you should have a folder such as 'obstacles\_new
 5)Using Python to process MIMO channels and generate beam-selection outputs
 ============
 
-1.	Codebook design
+1.Codebook design
 	
 The codebooks are generated with Matlab (very ugly code, should be later
-ported to Python in clean rewrite)
+ported to Python in clean rewrite). Note that this code utilizes functions from https://github.com/aldebaro/dsp-telecom-book-code, so you should download this repository and run `ak_setPath.m` to make it work properly.
 ```
 D:\github\5gm-lidar\matlab\upa_codebook_creation.m
 ```
-Assume we ran it twice to generate:
+Assume we ran it twice (changing the number of Nrx and Ntx) to generate:
 ```
 >> upa_codebook_creation
 Wrote upa_codebook_16x16_N832.mat
@@ -250,7 +249,7 @@ Wrote upa_codebook_4x4_N52.mat
 2.	Generating the equivalent channel gains that depend on the beams:
 
 Assuming the convert5gmv1ToChannels.py already wrote the output files (e.g. in folder .\insitedata), then 
-edit getBestBeamsFromChannelRays.py to change:
+edit getBestBeamsFromChannelRays.py to change the parameters bellow that suit the current simulation:
 
 ```
 insiteCSVFile = 'D:/github/5gm-data/list2_only_valids.csv'
@@ -277,7 +276,7 @@ D:\github\5gm-data>python getBestBeamsFromChannelRays.py
 This script informs when it ends some statistics and the histogram for each codebook (Tx and Rx). Confirm the statistics match your numLOS and numNLOS
 informed previously, and copy the histogram values to place on the Matlab script that prunes (reduces the sizes) of the codebooks.
 
-Copy the histograms to script upa_codebook_prune_unused
+Edit `matlab\upa_codebook_prune_unused.m` and copy the histograms generated to the script.
 ```
 tx_indices_histogram = [ 0 0 0 0 0 0 0 0 82 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 403 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 336 0 0 0 0 0 0 0 0 0 0 0 0 0 0 190 1 591 0 0 0 0 0 0 0 0 0 0 0 0 2 396 0 788 1 0 0 0 0 0 0 0 0 0 0 2 283 37 0 67 455 2 0 0 0 0 0 0 0 1 3 168 55 0 0 0 95 228 3 0 0 0 0 1 12 83 98 10 0 0 0 0 0 5 126 84 7 0 70 91 63 12 0 0 0 0 0 0 0 0 0 7 78 87 0 0 0 16 15 0 0 0 0 0 0 0 8 3 0 0 0 0 0 0 0 0 0 0 0 0 16 25 0 0 0 0 0 0 0 0 0 0 0 0 0 19 93 0 0 0 0 0 0 0 0 0 0 0 0 0 0 17 0 0 0 0 0 0 0 0 0 0 0 0 0 7 0 9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 10 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 230 3 0 0 0 0 0 216 0 0 0 0 0 0 0 55 4 201 2 0 0 0 0 381 0 0 0 0 0 1 0 13 0 21 132 5 1 0 0 218 0 0 0 0 1 56 0 0 0 0 13 157 7 0 0 612 0 0 0 0 79 18 0 0 0 0 0 13 369 6 0 777 0 0 0 0 17 0 0 0 0 0 0 0 1 436 23 40 0 0 0 0 0 0 0 0 0 0 0 0 1 132 589 202 0 0 0 0 0 0 0 0 0 0 0 0 0 2 209 175 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 72 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 0 0 0 0 0 0 0 0 0 0 30 0 0 0 0 0 0 0 0 0 0 9 0 0 1 142 2 0 0 0 0 2 0 0 0 0 0 1 0 0 169 5 0 0 0 0 0 0 0 0 0 0 0 0 0 43 ];
 rx_indices_histogram = [ 0 0 758 0 0 9 528 26 318 454 0 428 0 217 1271 168 52 5 88 92 0 0 0 0 3 2 0 0 0 0 0 0 0 0 0 0 252 148 0 84 1 177 0 1 7 3806 0 3 944 1029 0 323 ];
@@ -306,7 +305,7 @@ rxCodebookInputFileName = 'D:/github/5gm-lidar/matlab/rx_upa_codebook_4x4_N52_va
 
 Run createBeamsOutputsAsNpz.py again to create final npz’s with smaller codebooks (files in the output folder will be overwritten)
 ```
-D:\gits\lasse\software\5gm-lidar>python createBeamsOutputsAsNpz.py
+D:\github\5gm-lidar>python createBeamsOutputsAsNpz.py
 ```
 Note the new histograms do not have zeros:
 ```
@@ -323,12 +322,12 @@ The files output_e_XXX.npz and outputs_positions_e_XXX.hdf5 have the results for
 
 5. Generate ML outputs
 
-Edit createBeamsOutputsAsNpz.py. You will need to inform the codebook sizes (version "valids").
+Edit `createBeamsOutputsAsNpz.py`. You will need to inform the codebook sizes (version "valids").
 ```
 cd D:\gits\lasse\software\5gm-lidar
 python createBeamsOutputsAsNpz.py
 ```
-This saves file beams_output.npz that is the output of the neural nets.
+This saves file `beams_output.npz` that is the output of the neural nets.
 
 
 6)Beam-selection using LIDAR data
